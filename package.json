@@ -1,0 +1,34 @@
+{
+  "name": "swordio",
+  "version": "1.0.0",
+  "description": "A medieval warrior-based programming language",
+  "main": "index.js",
+  "bin": {
+    "swordio": "./bin/swordio.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrfishie/swordio.git"
+  },
+  "keywords": [
+    "swordio",
+    "language",
+    "warrior",
+    "fight",
+    "medieval",
+    "programming",
+    "esoteric",
+    "map",
+    "cell",
+    "stack"
+  ],
+  "author": "mrfishie <me@mrfishie.com> (http://mrfishie.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrfishie/swordio/issues"
+  },
+  "homepage": "https://github.com/mrfishie/swordio#readme"
+}
