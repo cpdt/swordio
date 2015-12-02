@@ -66,9 +66,9 @@ for (var i = 2; i < process.argv.length; i++) {
 }
 
 function showHelp() {
-    console.error("\n  Usage: swordio [file] [-i <text>] [--input <text>] [-s] [--stdin] [-c <code>] [--c <code>]");
+    console.error("\n  Usage: swordio [file] [-i <text>] [--input <text>] [-s] [--stdin] [-c <code>] [--code <code>]");
     console.error(  "                 [-o <file>] [--output <file>] [--help] [--version]");
-    console.error("\nRuns Swordio code. Use [file], or --input to provide the map. Outputs any program result to");
+    console.error("\nRuns Swordio code. Use [file] or --input to provide the map. Outputs any program result to");
     console.error(  "--output or stdout.");
     console.error("\n  Options:");
     console.error(  "      file");
