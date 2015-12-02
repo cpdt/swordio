@@ -10,7 +10,7 @@ Now, the Canny Clan isn't just any ordinary clan - it's the smartest clan in the
 
 ## Usage
 
-To learn how to write **Swordio** programs, take a look at the [language documentation](wiki/language).
+To learn how to write **Swordio** programs, take a look at the [language documentation](https://github.com/cpdt/swordio/wiki/Language).
 
 > Web based editor/debugger coming soon!
 
@@ -26,7 +26,7 @@ To run code from a file, use the `swordio` command:
 swordio [file]
 ```
 
-For more information on the command-line interface, including usages, take a look at the [interpreter documentation](wiki/interpreter).
+For more information on the command-line interface, including usages, take a look at the [interpreter documentation](https://github.com/cpdt/swordio/wiki/Interpreter).
 
 ## Credits
 
