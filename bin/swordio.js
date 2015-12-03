@@ -7,12 +7,15 @@ var swordio = require('../');
 var input = "";
 var code = false;
 var output = false;
+var map = false;
 
 var useStdin = false;
 
 var isNextInput = false;
 var isNextCode = false;
 var isNextOutput = false;
+
+var currentColor = 1;
 
 for (var i = 2; i < process.argv.length; i++) {
     var arg = process.argv[i];
@@ -45,6 +48,10 @@ for (var i = 2; i < process.argv.length; i++) {
             case '--output':
                 isNextOutput = true;
                 break;
+            case '-m':
+            case '--map':
+                map = true;
+                break;
             case '--help':
                 showHelp();
                 break;
@@ -67,7 +74,7 @@ for (var i = 2; i < process.argv.length; i++) {
 
 function showHelp() {
     console.error("\n  Usage: swordio [file] [-i <text>] [--input <text>] [-s] [--stdin] [-c <code>] [--code <code>]");
-    console.error(  "                 [-o <file>] [--output <file>] [--help] [--version]");
+    console.error(  "                 [-o <file>] [--output <file>] [-m] [--map] [--help] [--version]");
     console.error("\nRuns Swordio code. Use [file] or --input to provide the map. Outputs any program result to");
     console.error(  "--output or stdout.");
     console.error("\n  Options:");
@@ -81,6 +88,8 @@ function showHelp() {
     console.error(  "          Uses the provided code instead of the file.");
     console.error("\n      -o <file>, --output <file>");
     console.error(  "          Writes the program output to a file instead of stdout.");
+    console.error("\n      -m, --map");
+    console.error(  "          Displays a live-updating version of the map.");
     console.error("\n      --help");
     console.error(  "          Shows this help message.");
     console.error("\n      --version");
@@ -105,7 +114,7 @@ if (code) {
         readInput();
     } catch (ex) {
         console.error("Could not read Swordio file '" + process.argv[2] + "':");
-        console.error(ex.toString());
+        console.error(ex.stack);
         showHelp();
     }
 } else {
@@ -123,19 +132,104 @@ function readInput() {
         });
         process.stdin.on('error', function(ex) {
             console.error("Could not read input from stdin after " + input.length + " character(s):");
-            console.error(ex.toString());
+            console.error(ex.stack);
             showHelp();
         });
         process.stdin.on('end', ready);
     }
 }
 
-function ready() {
-    var procedure = swordio.createProcedure(mapText);
-    procedure.run(input, function(out) {
-        process.stdout.write(out);
-    });
+function pause(ms) {
+    var curr = Date.now();
+    ms += curr;
+    while (curr < ms) {
+        curr = Date.now();
+    }
+}
 
-    // add trailing newline
-    console.log("");
+function updateMap(map, enemyMap) {
+    term.saveCursor();
+
+    var remainingEnemies = map.enemies.slice();
+
+    // print out map tiles
+    for (var y = 0; y < map.cells.length; y++) {
+        var row = map.cells[y];
+        for (var x = 0; x < row.length; x++) {
+            var foundEnemy = false;
+            var enemy;
+
+            for (var i = 0; i < remainingEnemies.length; i++) {
+                enemy = remainingEnemies[i];
+
+                if (!enemy.isAlive) continue;
+                if (enemy.x + map.xOffset === x && enemy.y + map.yOffset === y) {
+                    foundEnemy = true;
+                    remainingEnemies.splice(i, 1);
+                    break;
+                }
+            }
+
+            if (foundEnemy) {
+                var enemyColor;
+                if (enemyMap.has(enemy)) enemyColor = enemyMap.get(enemy);
+                else {
+                    enemyColor = currentColor++;
+                    enemyMap.set(enemy, enemyColor);
+                    if (currentColor > 7) currentColor = 1;
+                }
+
+                term.brightColor(enemyColor, enemy.type);
+            } else term.white(row[x].type);
+        }
+        term.nextLine(1);
+    }
+
+    term.restoreCursor();
+}
+
+var term;
+
+function ready() {
+    try {
+        var procedure = swordio.createProcedure(mapText);
+
+        var enemyMap;
+        if (map) {
+            term = require('terminal-kit').terminal;
+            enemyMap = new WeakMap();
+
+            procedure.map.on('start tick', function () {
+                updateMap(procedure.map, enemyMap);
+
+                // pause for a while to allow the user to see the image
+                pause(100);
+            });
+        }
+
+        var outputPosition = 0;
+        procedure.run(input, function (out) {
+            if (map) {
+                term.saveCursor();
+                term.down(procedure.map.height + 3);
+                if (outputPosition !== 0) term.right(outputPosition);
+                term(out);
+                outputPosition += out.length;
+                term.restoreCursor();
+            } else process.stdout.write(out);
+        });
+
+        if (map) {
+            updateMap(procedure.map, enemyMap);
+            term.down(procedure.map.height + 3);
+        }
+
+        // add trailing newline
+        console.log("");
+    } catch (ex) {
+        if (map) term.down(procedure.map.height + 3);
+        console.error("Could not run map:");
+        console.error(ex.stack);
+        process.exit(1);
+    }
 }

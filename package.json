@@ -30,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/mrfishie/swordio/issues"
   },
-  "homepage": "https://github.com/mrfishie/swordio#readme"
+  "homepage": "https://github.com/mrfishie/swordio#readme",
+  "dependencies": {
+    "terminal-kit": "^0.16.4"
+  }
 }
