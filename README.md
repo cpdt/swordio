@@ -30,7 +30,7 @@ For more information on the command-line interface, including usages, take a loo
 
 ## Credits
 
-The first version of Swordio, as well as the Javascript interpreter, were created by ctdp.
+The first version of Swordio, as well as the Javascript interpreter, were created by cpdt.
 
 The language is inspired by a similar esoteric language, [Marbelous](https://github.com/marbelous-lang/marbelous.py) created by cjfaure with the aid of Martin Büttner, Nathan Merrill, overactor, sparr, githubphagocyte, es0124, and Visual Melon.
 
@@ -41,7 +41,7 @@ Swordio is also inspired by the game/simulator [SpaceChem](http://www.zachtronic
 Both Swordio, and the Swordio Javascript interpreter, are licensed under the MIT license, available below.
 
 ```
-Copyright (c) 2015 ctdp
+Copyright (c) 2015 cpdt
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
