@@ -1,6 +1,6 @@
 {
   "name": "swordio",
-  "version": "0.2",
+  "version": "0.2.0",
   "description": "A medieval warrior-based programming language",
   "main": "index.js",
   "bin": {
