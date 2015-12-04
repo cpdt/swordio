@@ -207,14 +207,13 @@ function ready() {
             });
         }
 
-        var outputPosition = 0;
+        var outputBuffer = "";
         procedure.run(input, function (out) {
             if (map) {
                 term.saveCursor();
                 term.down(procedure.map.height + 3);
-                if (outputPosition !== 0) term.right(outputPosition);
-                term(out);
-                outputPosition += out.length;
+                outputBuffer += out;
+                term(outputBuffer);
                 term.restoreCursor();
             } else process.stdout.write(out);
         });
